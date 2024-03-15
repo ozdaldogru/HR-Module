@@ -7,12 +7,13 @@ import RoleList from './pages/RoleList';
 import EmployeeList from './pages/EmployeeList';
 import EmployeeAdd from './pages/EmployeeAdd';
 import ManagerList from './pages/ManagerList';
-
+import Login from './components/Login';
 
 function App() {
   return (
     <>
       <Navbar />
+      <Login />
       <Outlet />
       <DepartmentList />
       <RoleList />

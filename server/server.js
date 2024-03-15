@@ -29,6 +29,9 @@ const sess = {
   })
 };
 
+var cors = require('cors');
+app.use(cors());
+
 // Use the session middleware with the defined configuration
 app.use(session(sess));
 
