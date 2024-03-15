@@ -1,23 +1,31 @@
 {
-  "name": "googlebooks-app",
+  "name": "hrmodule-project3",
   "version": "1.0.0",
-  "description": "",
+  "description": "<a ID=\"readme-top\"></a>",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "build": "cd client && npm run build",
-    "render-build":"npm install && npm run build",
+    "render-build": "npm install && npm run build",
     "seed": "node server/seeds/seed.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "project-3 group-5",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^5.1.0"
   },
   "dependencies": {
     "vite": "^5.1.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozdaldogru/HR-Module.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ozdaldogru/HR-Module/issues"
+  },
+  "homepage": "https://github.com/ozdaldogru/HR-Module#readme"
 }
