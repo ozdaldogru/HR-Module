@@ -5,12 +5,8 @@ import Auth from '../utils/auth';
 import withAuth from '../components/Auth';
 
 const AddManager = () => {
-  const [managers, setManager] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    role_id: ''
-  });
+  const [managers, setManager] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   const navigate = useNavigate();
 
@@ -18,6 +14,14 @@ const AddManager = () => {
     if (!Auth.loggedIn()) {
       navigate('/');
     }
+
+    axios.get('/api/roles')
+      .then(response => {
+        setRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching roles:', error);
+      });
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -35,11 +39,11 @@ const AddManager = () => {
   };
 
   return (
-    <div className='container'>
-      <h1>Add Manager</h1>
-      <form>
+    <div className='container col-md-6 mt-3'>
+      <h2 className='text-center'>Add Manager</h2>
+      <form className='form-card mt-3'>
         <div className='mb-3 mt-3'>
-          <label className='form-label'> First Name: </label>
+          <label className='form-label'>First Name:</label>
           <input
             type='text'
             className='form-control'
@@ -51,7 +55,7 @@ const AddManager = () => {
           />
         </div>
         <div className='mb-3 mt-3'>
-          <label className='form-label'> Last Name: </label>
+          <label className='form-label'>Last Name:</label>
           <input
             type='text'
             className='form-control'
@@ -63,7 +67,7 @@ const AddManager = () => {
           />
         </div>
         <div className='mb-3 mt-3'>
-          <label className='form-label'> Email: </label>
+          <label className='form-label'>Email:</label>
           <input
             type='email'
             className='form-control'
@@ -75,16 +79,19 @@ const AddManager = () => {
           />
         </div>
         <div className='mb-3 mt-3'>
-          <label className='form-label'>Role ID:</label>
-          <input
-            type='text'
-            className='form-control'
+          <label className='form-label'>Role Title:</label>
+          <select
+            className='form-select'
             id='role_id'
-            placeholder='Enter Role ID'
+            onChange={handleChange}
             name='role_id'
             value={managers.role_id}
-            onChange={handleChange}
-          />
+          >
+            <option value='' disabled selected>Select Role</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>{role.title}</option>
+            ))}
+          </select>
         </div>
         <button type='submit' className='btn btn-primary' onClick={handleClick}>Add Manager</button>
       </form>

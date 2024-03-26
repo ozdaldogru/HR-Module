@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Manager, Role } = require("../../models");
+const { Manager, Role, Employee } = require("../../models");
 const withAuth = require("../../utils/auth");
 
 // GET all managers
@@ -7,24 +7,34 @@ router.get("/", withAuth, async (req, res) => {
   try {
     const managerData = await Manager.findAll(
       {
-        include: [{ model: Role, attributes: ["title"] }],
+        include: [
+          {
+            model: Role, attributes: ["title"]
+          }
+        ]
       }
     );
     res.status(200).json(managerData);
   } catch (err) {
     res.status(500).json(err);
   }
-}
-);
+});
 
 // GET a single manager
 router.get("/:id", withAuth, async (req, res) => {
   try {
-    const managerData = await Manager.findByPk(req.params.id
-      // {
-      //   include: [{ model: Employee, attributes: ['first_name', 'last_name'] }]
-      // }
-    );
+    const managerData = await Manager.findByPk(req.params.id, {
+      include: [
+        {
+          model: Role, attributes: ["title"],
+          include: [
+            {
+              model: Employee, attributes: ["first_name", "last_name"]
+            }
+          ]
+        }
+      ]
+    });
 
     if (!managerData) {
       res.status(404).json({ message: "No manager found with that id!" });
@@ -39,22 +49,18 @@ router.get("/:id", withAuth, async (req, res) => {
 );
 
 // CREATE a manager
-router.post(
-  "/",
-  /*withAuth,*/ async (req, res) => {
-    try {
-      const managerData = await Manager.create(req.body);
-      res.status(200).json(managerData);
-    } catch (err) {
-      res.status(400).json(err);
-    }
+router.post("/", withAuth, async (req, res) => {
+  try {
+    const managerData = await Manager.create(req.body);
+    res.status(200).json(managerData);
+  } catch (err) {
+    res.status(400).json(err);
   }
+}
 );
 
 // UPDATE a manager
-router.put(
-  "/:id",
-  /*withAuth,*/ async (req, res) => {
+router.put("/:id", withAuth, async (req, res) => {
     try {
       const managerData = await Manager.update(req.body, {
         where: {
@@ -75,9 +81,7 @@ router.put(
 );
 
 // DELETE a manager
-router.delete(
-  "/:id",
-  /*withAuth,*/ async (req, res) => {
+router.delete( "/:id", withAuth, async (req, res) => {
     try {
       const managerData = await Manager.destroy({
         where: {

@@ -44,7 +44,7 @@ const UpdateDepartment = () => {
   return (
     <div className='container col-md-6 mt-3'>
       <h2 className='text-center'>Edit Department</h2>
-      <form>
+      <form className='form-card mt-3'>
         <div className='mb-3 mt-3'>
           <label className='form-label'>Department ID:</label>
           <input

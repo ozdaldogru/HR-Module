@@ -6,12 +6,8 @@ import withAuth from '../components/Auth';
 
 const UpdateManager = () => {
   const { id } = useParams();
-  const [managers, setManager] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    role_id: '',
-  });
+  const [managers, setManager] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,6 +17,22 @@ const UpdateManager = () => {
     if (!Auth.loggedIn()) {
       navigate('/');
     }
+
+    axios.get(`/api/managers/${managerId}`)
+      .then((response) => {
+        setManager(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching manager:', error);
+      });
+
+    axios.get('/api/roles')
+      .then(response => {
+        setRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching roles:', error);
+      });
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -38,9 +50,9 @@ const UpdateManager = () => {
   };
 
   return (
-    <div className='container'>
-      <h1>Edit Manager</h1>
-      <form>
+    <div className='container col-md-6 mt-3'>
+      <h2 className='text-center'>Edit Manager</h2>
+      <form className='form-card mt-3'>
         <div className='mb-3 mt-3'>
           <label className='form-label'> ID:</label>
           <input
@@ -90,16 +102,21 @@ const UpdateManager = () => {
           />
         </div>
         <div className='mb-3 mt-3'>
-          <label className='form-label'>Role ID:</label>
-          <input
-            type='text'
-            className='form-control'
+          <label className='form-label'>Role Title:</label>
+          <select
+            type='number'
+            className='form-select'
             id='role_id'
-            placeholder='Enter Role ID'
+            placeholder='Enter User ID'
             name='role_id'
             value={managers.role_id}
             onChange={handleChange}
-          />
+          >
+            <option value='' disabled>Select Role</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>{role.title}</option>
+            ))}
+          </select>
         </div>
         <button type='submit' className='btn btn-primary' onClick={handleClick}>Update</button>
       </form>

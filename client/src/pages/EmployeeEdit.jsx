@@ -61,7 +61,7 @@ const UpdateEmployee = () => {
   return (
     <div className='container col-md-6 my-3'>
       <h2 className='text-center'>Edit Employee</h2>
-      <form>
+      <form className='form-card mt-3'>
         <div className='mb-3 mt-3'>
           <label className='form-label'>ID:</label>
           <input
@@ -114,7 +114,7 @@ const UpdateEmployee = () => {
           <label className='form-label'>Role Title:</label>
           <select
             type='number'
-            className='form-control'
+            className='form-select'
             id='role_id'
             placeholder='Enter User ID'
             name='role_id'

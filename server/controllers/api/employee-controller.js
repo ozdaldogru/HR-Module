@@ -3,13 +3,20 @@ const { Employee, Role, Department } = require('../../models'); // Import the Em
 const withAuth = require('../../utils/auth'); // Import the withAuth middleware
 
 // GET all employees
-router.get('/', /*withAuth,*/ async (req, res) => {
+router.get('/', withAuth, async (req, res) => {
   try {
     const employeeData = await Employee.findAll(
       {
-        include: [{
-          model: Role, attributes: ['title'], include: [{ model: Department, attributes: ['name'] }]
-        }]
+        include: [
+          {
+            model: Role, attributes: ['title'], 
+            include: [
+              { 
+                model: Department, attributes: ['name'] 
+              }
+            ]
+          }
+        ]
       }
     );
     res.status(200).json(employeeData);
@@ -19,9 +26,20 @@ router.get('/', /*withAuth,*/ async (req, res) => {
 });
 
 // GET a single employee
-router.get('/:id', /*withAuth,*/ async (req, res) => {
+router.get('/:id', withAuth, async (req, res) => {
   try {
-    const employeeData = await Employee.findByPk(req.params.id);
+    const employeeData = await Employee.findByPk(req.params.id, {
+      include: [
+        {
+          model: Role, attributes: ['title'], 
+          include: [
+            { 
+              model: Department, attributes: ['name'] 
+            }
+          ]
+        }
+      ]
+    });
 
     if (!employeeData) {
       res.status(404).json({ message: 'No employee found with that id!' });
@@ -35,7 +53,7 @@ router.get('/:id', /*withAuth,*/ async (req, res) => {
 });
 
 // CREATE an employee
-router.post('/', /*withAuth,*/ async (req, res) => {
+router.post('/', withAuth, async (req, res) => {
   try {
     const employeeData = await Employee.create(req.body);
     res.status(200).json(employeeData);
@@ -45,7 +63,7 @@ router.post('/', /*withAuth,*/ async (req, res) => {
 });
 
 // UPDATE an employee
-router.put('/:id', /*withAuth,*/ async (req, res) => {
+router.put('/:id', withAuth, async (req, res) => {
   try {
     const employeeData = await Employee.update(req.body, {
       where: {
@@ -65,7 +83,7 @@ router.put('/:id', /*withAuth,*/ async (req, res) => {
 });
 
 // DELETE an employee
-router.delete('/:id', /*withAuth,*/ async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
   try {
     const employeeData = await Employee.destroy({
       where: {
@@ -84,4 +102,5 @@ router.delete('/:id', /*withAuth,*/ async (req, res) => {
   }
 });
 
-module.exports = router; // Export the router object
+// Export the router object
+module.exports = router;

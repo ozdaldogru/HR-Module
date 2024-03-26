@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001; // Set the port for the application
 const sess = {
   secret: process.env.SESSION_SECRET, // Secret key for session encryption
   cookie: {
-    maxAge: 3600000, // Session expiration time in milliseconds (1 hour)
+    maxAge: 86400000, // Session expiration time in milliseconds (24 hours)
     httpOnly: true, // Session cookie is not accessible via client-side JavaScript
     secure: false, // Only send the cookie over HTTPS if secure is set to true
     sameSite: 'strict', // Cookie is only sent in a first-party context
@@ -29,7 +29,7 @@ const sess = {
   })
 };
 
-var cors = require('cors');
+const cors = require('cors');
 app.use(cors());
 
 // Use the session middleware with the defined configuration
@@ -39,11 +39,16 @@ app.use(session(sess));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Set up middleware for serving static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Use the defined routes for the application
 app.use(routes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 // Synchronize the Sequelize models with the database and start the Express server
 sequelize.sync({ force: false }).then(() => {

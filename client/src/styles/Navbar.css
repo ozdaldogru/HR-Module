@@ -1,0 +1,19 @@
+.navbar-nav a:first-child {
+  padding: 0px 8px; /* Add padding to the first list item */
+}
+
+.navbar-nav a ~ a {
+  border-left: 1px solid rgba(255, 255, 255, 0.3); /* Add border between list items */
+  padding: 0px 8px; /* Add padding to the rest of the list items */
+}
+
+@media screen and (max-width: 767px) { /* Adjust styles for smaller screens */
+  .navbar-nav a:first-child {
+    padding: 8px; /* Add padding to the first list item */
+  }
+  
+  .navbar-nav a ~ a {
+    border-left: none;
+    padding: 8px; /* Add padding to the rest of the list items */
+  }
+}

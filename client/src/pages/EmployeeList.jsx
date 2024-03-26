@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Auth from '../utils/auth';
 import withAuth from '../components/Auth';
+import DeleteModal from '../components/DeleteModal';
+import { CSVLink } from "react-csv";
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
+  const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -20,6 +23,7 @@ function EmployeeList() {
     axios.get('/api/employees')
       .then(response => {
         setEmployees(response.data);
+        setRecords(response.data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -27,6 +31,16 @@ function EmployeeList() {
         setIsLoading(false);
       });
   }, [navigate]);
+
+  const Filter = (event) => {
+    setEmployees(records.filter(employee =>
+      employee.first_name.toLowerCase().includes(event.target.value) ||
+      employee.last_name.toLowerCase().includes(event.target.value) ||
+      employee.email.toLowerCase().includes(event.target.value) ||
+      employee.role.title.toLowerCase().includes(event.target.value)
+
+    ))
+  }
 
   const handleDelete = (id) => {
     setDeleteId(id);
@@ -42,34 +56,12 @@ function EmployeeList() {
       .catch(error => {
         console.error('Error deleting employee:', error);
         setShowModal(false);
-        window.alert('Failed to delete employee. Please try again later.');
+        // window.alert('Failed to delete employee. Please try again later.');
       });
   };
 
   const cancelDelete = () => {
     setShowModal(false);
-  };
-
-  const renderModal = () => {
-    return (
-      <div className="modal" style={{ display: showModal ? 'block' : 'none' }}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Confirm Delete</h5>
-              <button type="button" className="btn-close" onClick={cancelDelete}></button>
-            </div>
-            <div className="modal-body">
-              Are you sure you want to delete this employee?
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={cancelDelete}>Cancel</button>
-              <button type="button" className="btn btn-danger" onClick={confirmDelete}>Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   if (isLoading) {
@@ -81,9 +73,18 @@ function EmployeeList() {
       <div className='d-flex justify-content-center'>
         <h2>Employee List</h2>
       </div>
-      <Link to='add' className='btn btn-success'> Add Employee</Link>
-      <div className='mt-3'>
-        <table className='table'>
+      <div className='d-flex justify-content-between'>
+        <Link to='add' className='btn btn-success'>Add Employee</Link>
+        <CSVLink className='btn btn-dark' data={employees}>Export To CSV</CSVLink>
+      </div>
+      <div className='mt-3 card'>
+        <input
+          type="text"
+          className='form-control'
+          placeholder='Type to Search'
+          onChange={Filter}
+        />
+        <table className='table table-bordered table-hover'>
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -113,7 +114,12 @@ function EmployeeList() {
           </tbody>
         </table>
       </div>
-      {renderModal()}
+      <DeleteModal
+        showModal={showModal}
+        cancelDelete={cancelDelete}
+        confirmDelete={confirmDelete}
+        entityType="employees"
+      />
     </div>
   );
 }

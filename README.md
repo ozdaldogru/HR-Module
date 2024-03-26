@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# ⭐ Final Project: HR-Module ⭐
+# ⭐ Employee Management System: HR-Module ⭐
 
 [![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)](https://www.w3schools.com/js/)
 [![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/)
@@ -20,7 +20,7 @@
 </div>
 
 ## Goal of the Project
-* Create the Human Resources module application helps to communicate changes to employment records in Human Resources Records Information System (HRRIS) 
+* Create the robust "Human Resources Module Application" helps to `communicate` `manage` `update` `change` to employment records in `Employee Management System`
 
 ### In General
 * Essential role of projects in the journey to becoming a full-stack web developer.
@@ -50,6 +50,13 @@
 
 The following images show the web application's appearance and functionality:
 
+<img width="817" alt="Screenshot 2024-03-21 203706" src="https://github.com/justinsta624/readme/assets/143357899/a0266e5f-4d22-4a15-82c0-4b6c40589961">
+<img width="815" alt="Screenshot 2024-03-21 203725" src="https://github.com/justinsta624/readme/assets/143357899/a7086741-1942-443f-9a87-8107e0c252d7">
+<img width="822" alt="Screenshot 2024-03-21 203736" src="https://github.com/justinsta624/readme/assets/143357899/df1bed93-dddf-4e97-a34f-7077ef7769a8">
+<img width="940" alt="Screenshot 2024-03-21 203752" src="https://github.com/justinsta624/readme/assets/143357899/7da5366f-af6b-4561-a5b6-31f2515acc48">
+<img width="941" alt="Screenshot 2024-03-21 203807" src="https://github.com/justinsta624/readme/assets/143357899/1e03d8c1-a196-4561-8808-88049f10a6ba">
+<img width="952" alt="Screenshot 2024-03-21 203837" src="https://github.com/justinsta624/readme/assets/143357899/056b51f5-5863-48ec-8d1f-14f4ed53cd12">
+<img width="951" alt="Screenshot 2024-03-21 203856" src="https://github.com/justinsta624/readme/assets/143357899/e8e95c65-0935-429d-9529-8054819e080a">
 
 <div align="center">
 
@@ -143,6 +150,7 @@ npm run seed
 7. You can run start the server once packages have been installed and the database is created. Run the below in the CLI:
 ```
 node server.js
+npm run develop
 ```
 
 HR-Module is deployed VIA following link </div>
@@ -153,31 +161,20 @@ HR-Module is deployed VIA following link </div>
 ### In General
 * Create a MERN stack single-page application that works with real-world data to solve a real-world challenge, with a focus on data and user demand.
 * Use React for the front end.
-* Use GraphQL with a Node.js and Express.js server.
+* Use Node.js and Express.js server.
 * Use MySQL2 and the Sequelize for the database.
-* Use queries and mutations for retrieving, adding, updating, and deleting data.
+* Use Axios for retrieving, adding, updating, and deleting data.
 * Be deployed using Heroku (with data).
 * Have a polished UI.
-* Be responsive.
-* Be interactive (i.e., accept and respond to user input).
+* Be responsive & interactive (i.e., accept and respond to user input).
 * Include authentication (JWT).
-* Protect sensitive API key information on the server.
 * Have a clean repository that meets quality coding standards (file structure, naming conventions, best practices for class and id naming conventions, indentation, high-quality comments, etc.).
 * Have a high-quality README (with unique name, description, technologies used, screenshot, and link to deployed application).
 
-### CSS Styling
-* Look into the concept of CSS-in-JS, which abstracts CSS to the component level, using JavaScript to describe styles in a declarative and maintainable way. Some popular libraries include [styled-components](https://styled-components.com/) and [Emotion](https://emotion.sh/docs/introduction).
-* Try using a component library, such as [Semantic UI](https://semantic-ui.com/), [Chakra UI](https://chakra-ui.com/), or [Ant Design](https://ant.design/).
+### Vite for React: Steps to follow
 
-### Payment Platform
-* Integrating the Stripe payment platform. (Even if you don’t create an e-commerce application, you could set up your site to accept charitable donations)
-
-### Progressive Web Application
-* Uses a web manifest
-* Uses a service worker for offline functionality
-* Is installable
-
-### Vite: Steps to follow
+* To serve as a tool for quickly setting up and developing modern web applications, like React.
+* Focuses on providing a fast development experience by leveraging ES module imports, pre-bundling dependencies during development, and optimizing build times.
 
 1. In the command line, navigate to the desired parent folder and run `npm create vite@latest`.
 2. Enter the desired name of new project folder.
@@ -222,8 +219,7 @@ export default defineConfig({
 - **Dotenv**: Utility for loading environment variables.
 - **Nodemon**: Development tool for auto-reloading the server during development.
 - **React**: Open-source JS library used for building user interfaces or UI components, particularly for single-page applications where user interactions are dynamic and frequent.
-- **GraphQL**: Query language for APIs and a runtime environment for executing those queries against your data.
-- **Apollo Provider**: Component provided by the Apollo Client library, which is a comprehensive state management library for handling GraphQL data.
+- **Axios**: Promise-based HTTP client for making HTTP requests in JavaScript environments, including browsers and Node.js, used for performing CRUD operations (Create, Read, Update, Delete) in web applications.
 - **Vite**: Build tool and development server for modern web development projects.
 - **Heroku**: A cloud platform that offers easy deployment and management of web applications.
 
@@ -242,25 +238,22 @@ export default defineConfig({
 - [React Docs: Getting Started](https://react.dev/learn)
 - [Vite Docs: Getting Started](https://vitejs.dev/guide/)
 - [React Docs on JSX](https://react.dev/learn/writing-markup-with-jsx)
-- [Apollo Sandbox](https://www.apollographql.com/docs/graphos/explorer/sandbox/)
-- [GraphQL Queries & Mutations](https://graphql.org/learn/queries/)
-- [GraphQL: Passing Arguments](https://graphql.org/graphql-js/passing-arguments/)
 - [JSON Web Tokens](https://jwt.io/introduction)
-- [Apollo: Authentication and authorization](https://www.apollographql.com/docs/apollo-server/security/authentication/)
-- [Vite Docs on deploying with Netlify](https://coding-boot-camp.github.io/full-stack/heroku/deploy-with-heroku-and-mysql)
+- [How To Use Axios with React](https://www.digitalocean.com/community/tutorials/react-axios-react)
+- [Axios in React: A Guide for Beginners](https://www.geeksforgeeks.org/axios-in-react-a-guide-for-beginners/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## Collaborators
-[![OzdalDogru](https://img.shields.io/badge/Ozdal-Dogru-blueviolet)](https://github.com/ozdaldogru)
-[![AustinGraham](https://img.shields.io/badge/Austin-Graham-red)](https://github.com/kyoriku)
-[![DanNadler](https://img.shields.io/badge/Dan-Nadler-green)](https://github.com/dannadlerp/)
-[![JustinLee](https://img.shields.io/badge/Justin-Lee-magenta)](https://github.com/justinsta624)
+[![OzdalDogru](https://img.shields.io/badge/Ozdal-Dogru-blueviolet.svg?style=for-the-badge&logo=DOGRU)](https://github.com/ozdaldogru)
+[![AustinGraham](https://img.shields.io/badge/Austin-Graham-red.svg?style=for-the-badge&logo=GRAHAM)](https://github.com/kyoriku)
+[![DanNadler](https://img.shields.io/badge/Dan-Nadler-green.svg?style=for-the-badge&logo=NADLER)](https://github.com/dannadlerp/)
+[![JustinLee](https://img.shields.io/badge/Justin-Lee-magenta.svg?style=for-the-badge&logo=LEE)](https://github.com/justinsta624)
 
 ## Presentation
 
-[Group 5 Presentation of Project: HR-Module](https://docs.google.com/presentation/d/1xnzeLJCSkiQqjjZmUebgKcdLThbfLlPm/edit?usp=sharing&ouid=107335282898826746758&rtpof=true&sd=true)
+[Group 5 Presentation of Project: HR-Module](https://docs.google.com/presentation/d/1ZLYdRFarGXJVZXaeoLB7-ziaqXrgrfQr/edit?usp=sharing&ouid=107335282898826746758&rtpof=true&sd=true)
 
 to address the following: 
 * `Elevator pitch` A one-minute description of your application.
@@ -275,7 +268,7 @@ to address the following:
 Followings are the outcomes of the project 3:
 
 * The URL of the deployed application. </br>
-[Deployed Application](https://drive.google.com/file/d/1DesRcjh71bOVOYdFWXmtrp2ilY5Ni-Oo/view) </br>
+[Deployed Application](https://gamersheim-67293fc106fb.herokuapp.com) </br>
 
 * The URL of the GitHub repository, with a unique name and a README describing the project </br>
 [Repository for this Project](https://github.com/ozdaldogru/HR-Module )
@@ -285,6 +278,7 @@ Followings are the outcomes of the project 3:
 
 For details click on the following link to go to the "LICENSE" file:
 
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg?style=for-the-badge&logo=isc)](https://opensource.org/licenses/ISC)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=mit)](https://opensource.org/licenses/MIT)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
