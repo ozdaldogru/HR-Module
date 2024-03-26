@@ -1,16 +1,12 @@
-// importing necessary modules and components
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Auth from "../utils/auth";
 import withAuth from "../components/Auth";
-import DeleteModal from "../components/DeleteModal";
 import "../styles/Modal.css";
-import { CSVLink } from "react-csv";
 
 // Define the DepartmentList component to display the list of departments
 function DepartmentList() {
-  // Define state variables using useState hook
   const [, /* roles */ setRoles] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [records, setRecords] = useState([]);
@@ -29,7 +25,26 @@ function DepartmentList() {
       return;
     }
 
-    getAllDepartments();
+    axios
+      .get("/api/departments")
+      .then((departmentResponse) => {
+        setDepartments(departmentResponse.data);
+        // Fetch roles after departments are fetched
+        axios
+          .get("/api/roles")
+          .then((rolesResponse) => {
+            setRoles(rolesResponse.data);
+            setIsLoading(false);
+          })
+          .catch((rolesError) => {
+            console.error("Error fetching roles:", rolesError);
+            setIsLoading(false);
+          });
+      })
+      .catch((departmentError) => {
+        console.error("Error fetching departments:", departmentError);
+        setIsLoading(false);
+      });
   }, [navigate]);
 
   const Filter = (event) => {
@@ -38,19 +53,6 @@ function DepartmentList() {
         department.name.toLowerCase().includes(event.target.value)
       )
     );
-  };
-
-  // Define a function to fetch all roles from the API
-  const getAllRoles = async () => {
-    try {
-      const response = await axios.get("/api/roles");
-      setRoles(response.data);
-      setRecords(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching all roles:", error);
-      setIsLoading(false);
-    }
   };
 
   // Define a function to fetch all departments from the API
@@ -91,41 +93,67 @@ function DepartmentList() {
     setShowModal(true);
   };
 
-  // Define the confirmDelete function to delete the department
-  const confirmDelete = async () => {
-    try {
-      const department = await getSingleDepartment(deleteId);
-      const associatedRoles = department.roles.map((role) => role.title);
-      if (associatedRoles.length > 0) {
-        setShowModal(true);
-        setErrorMessage(
-          <div>
-            <p>{`Cannot delete ${department.name} department. Please remove associated roles first:`}</p>
-            <ul>
-              {associatedRoles.map((role, index) => (
-                <li key={index}>{role}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      } else {
-        await deleteDepartment(deleteId);
+  // Define the confirmDelete and cancelDelete functions
+  const confirmDelete = () => {
+    axios
+      .delete(`/api/roles/${deleteId}`)
+
+      //      .delete(`api/departments/${deleteId}`)
+      .then(() => {
+        // Remove the deleted department from the state
         setDepartments((departments) =>
           departments.filter((department) => department.id !== deleteId)
         );
         setShowModal(false);
-      }
-    } catch (error) {
-      console.error("Error during delete operation:", error);
-      setShowModal(true);
-      setErrorMessage(error.message);
-    }
+      })
+      .catch((error) => {
+        console.error("Error deleting department:", error);
+        setShowModal(false);
+      });
   };
 
   // Define the cancelDelete function to close the modal
   const cancelDelete = () => {
     setShowModal(false);
-    setErrorMessage("");
+  };
+
+  // Render the modal to confirm delete
+  const renderModal = () => {
+    return (
+      <div className="modal" style={{ display: showModal ? "block" : "none" }}>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirm Delete</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={cancelDelete}
+              ></button>
+            </div>
+            <div className="modal-body">
+              Are you sure you want to delete this department?
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   // If loading, show loading indicator
@@ -139,23 +167,12 @@ function DepartmentList() {
       <div className="d-flex justify-content-center">
         <h2>Departments List</h2>
       </div>
-      <div className="d-flex justify-content-between">
-        <Link to="add" className="btn btn-success">
-          {" "}
-          Add Department
-        </Link>
-        <CSVLink className="btn btn-dark" data={departments}>
-          Export To CSV
-        </CSVLink>
-      </div>
-      <div className="mt-3 card">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Type to Search"
-          onChange={Filter}
-        />
-        <table className="table table-bordered table-hover">
+      <Link to="add" className="btn btn-success">
+        {" "}
+        Add Department
+      </Link>
+      <div className="mt-3">
+        <table className="table">
           <thead>
             <tr>
               <th>Department ID</th>
@@ -199,5 +216,5 @@ function DepartmentList() {
   );
 }
 
-// Wrap the DepartmentList component with the withAuth HOC for authentication
+// Wrap the DepartmentList component with the withAuth HOC
 export default withAuth(DepartmentList);
