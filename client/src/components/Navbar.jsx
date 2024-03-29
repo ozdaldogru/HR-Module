@@ -42,9 +42,7 @@ const AppNavbar = () => {
     <>
       <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
         <Container fluid>
-          <Navbar.Brand>
-            Employee Management System
-          </Navbar.Brand>
+          <Navbar.Brand>AdminAccess</Navbar.Brand>
           <Navbar.Toggle aria-controls='responsive-navbar-nav' />
           <Navbar.Collapse className='justify-content-end' id='responsive-navbar-nav'>
             <Nav className='ml-auto text-end'>
