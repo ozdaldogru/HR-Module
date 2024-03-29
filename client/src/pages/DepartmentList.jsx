@@ -1,12 +1,11 @@
 // importing necessary modules and components
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CSVLink } from "react-csv";
 import axios from 'axios';
 import Auth from '../utils/auth';
 import withAuth from '../components/Auth';
 import DeleteModal from '../components/DeleteModal';
-import { CSVLink } from "react-csv";
-import '../styles/Modal.css';
 
 // Define the DepartmentList component to display the list of departments
 function DepartmentList() {
@@ -27,16 +26,8 @@ function DepartmentList() {
       navigate('/');
       return;
     }
-
     getAllDepartments();
   }, [navigate]);
-
-  const Filter = (event) => {
-    setDepartments(records.filter(department =>
-      department.name.toLowerCase().includes(event.target.value)
-
-    ))
-  }
 
   // Define a function to fetch all departments from the API
   const getAllDepartments = async () => {
@@ -49,6 +40,13 @@ function DepartmentList() {
       console.error('Error fetching all departments:', error);
       setIsLoading(false);
     }
+  };
+
+  // Define a function to filter the departments based on the search input
+  const Filter = (event) => {
+    setDepartments(records.filter(department =>
+      department.name.toLowerCase().includes(event.target.value)
+    ))
   };
 
   // Define a function to fetch a single department by ID
@@ -65,6 +63,8 @@ function DepartmentList() {
   const deleteDepartment = async (deleteId) => {
     try {
       await axios.delete(`/api/departments/${deleteId}`);
+      setDepartments(departments => departments.filter(department => department.id !== deleteId));
+      setShowModal(false);
     } catch (error) {
       console.error('Error deleting department:', error);
     }
@@ -95,8 +95,6 @@ function DepartmentList() {
         );
       } else {
         await deleteDepartment(deleteId);
-        setDepartments(departments => departments.filter(department => department.id !== deleteId));
-        setShowModal(false);
       }
     } catch (error) {
       console.error('Error during delete operation:', error);
@@ -111,7 +109,7 @@ function DepartmentList() {
     setErrorMessage('');
   };
 
-  // If loading, show loading indicator
+  // If the data is still loading, display a loading message
   if (isLoading) {
     return <h3 className='text-center m-3'>Loading...</h3>;
   }
@@ -119,13 +117,16 @@ function DepartmentList() {
   // Render the list of departments in a table format with edit and delete buttons for each department
   return (
     <div className='px-5 mt-3'>
+      {/* Header */}
       <div className='d-flex justify-content-center'>
         <h2>Departments List</h2>
       </div>
+      {/* Add Department and Export Buttons */}
       <div className='d-flex justify-content-between'>
         <Link to='add' className='btn btn-success'> Add Department</Link>
         <CSVLink className='btn btn-dark' data={departments} >Export To CSV</CSVLink>
       </div>
+      {/* Search Input */}
       <div className='mt-3 card'>
         <input
           type="text"
@@ -134,7 +135,9 @@ function DepartmentList() {
           onChange={Filter}
           id='searchInput'
         />
+        {/* Department Table */}
         <table className='table table-bordered table-hover'>
+          {/* Table Header */}
           <thead className='thead table-dark'>
             <tr>
               <th>Department ID</th>
@@ -142,20 +145,31 @@ function DepartmentList() {
               <th>Action</th>
             </tr>
           </thead>
+          {/* Table Body */}
           <tbody>
-            {departments.map((department) => (
-              <tr key={department.id}>
-                <td>{department.id}</td>
-                <td>{department.name}</td>
-                <td>
-                  <Link to={`/departments/` + department.id} className='btn btn-info btn-sm me-2'>Edit</Link>
-                  <button className='btn btn-warning btn-sm' onClick={() => handleDelete(department.id)}>Delete</button>
-                </td>
+            {/* Check if departments exist, if not display a message */}
+            {departments.length === 0 ? (
+              <tr>
+                <td colSpan="3">No departments found.</td>
               </tr>
-            ))}
+            ) : (
+              // Map through departments and render each department
+              departments.map((department) => (
+                <tr key={department.id}>
+                  <td>{department.id}</td>
+                  <td>{department.name}</td>
+                  <td>
+                    {/* Edit and Delete Buttons */}
+                    <Link to={`/departments/` + department.id} className='btn btn-info btn-sm me-2'>Edit</Link>
+                    <button className='btn btn-warning btn-sm' onClick={() => handleDelete(department.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
+      {/* Delete Modal */}
       <DeleteModal
         showModal={showModal}
         setShowModal={setShowModal}

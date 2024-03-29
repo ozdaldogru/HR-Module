@@ -19,7 +19,7 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 // GET a single role
-router.get('/:id', /*withAuth,*/ async (req, res) => {
+router.get('/:id', withAuth, async (req, res) => {
   try {
     const roleData = await Role.findByPk(req.params.id,
       {

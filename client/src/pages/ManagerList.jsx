@@ -19,18 +19,29 @@ function ManagerList() {
       navigate('/');
       return;
     }
-
-    axios.get('/api/managers')
-      .then(response => {
-        setManagers(response.data);
-        setRecords(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching managers:', error);
-        setIsLoading(false);
-      });
+    getAllManagers();
   }, [navigate]);
+
+  const getAllManagers = async () => {
+    try {
+      const response = await axios.get('/api/managers');
+      setManagers(response.data);
+      setRecords(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching managers:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const deleteManager = async () => {
+    try {
+      await axios.delete(`/api/managers/${deleteId}`);
+      setManagers(managers.filter(manager => manager.id !== deleteId));
+    } catch (error) {
+      console.error('Error deleting manager:', error);
+    }
+  };
 
   const Filter = (event) => {
     setManagers(records.filter(manager =>
@@ -38,26 +49,21 @@ function ManagerList() {
       manager.last_name.toLowerCase().includes(event.target.value) ||
       manager.email.toLowerCase().includes(event.target.value) ||
       manager.role.title.toLowerCase().includes(event.target.value)
-
     ))
-  }
+  };
+
+  const confirmDelete = () => {
+    try {
+      deleteManager();
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error deleting manager:', error);
+    }
+  };
 
   const handleDelete = (id) => {
     setDeleteId(id);
     setShowModal(true);
-  };
-
-  const confirmDelete = () => {
-    axios.delete(`api/managers/${deleteId}`)
-      .then(() => {
-        setManagers(managers => managers.filter(manager => manager.id !== deleteId));
-        setShowModal(false);
-      })
-      .catch(error => {
-        console.error('Error deleting manager:', error);
-        setShowModal(false);
-        // window.alert('Failed to delete manager. Please try again later.');
-      });
   };
 
   const cancelDelete = () => {
@@ -97,19 +103,25 @@ function ManagerList() {
             </tr>
           </thead>
           <tbody>
-            {managers.map((manager) => (
-              <tr key={manager.id}>
-                <td>{manager.id}</td>
-                <td>{manager.first_name}</td>
-                <td>{manager.last_name}</td>
-                <td>{manager.email}</td>
-                <td>{manager.role.title}</td>
-                <td>
-                  <Link to={`/managers/` + manager.id} className='btn btn-info btn-sm me-2'>Edit</Link>
-                  <button className='btn btn-warning btn-sm' onClick={() => handleDelete(manager.id)}>Delete</button>
-                </td>
+            {managers.length === 0 ? (
+              <tr>
+                <td colSpan='6'>No managers found</td>
               </tr>
-            ))}
+            ) : (
+              managers.map((manager) => (
+                <tr key={manager.id}>
+                  <td>{manager.id}</td>
+                  <td>{manager.first_name}</td>
+                  <td>{manager.last_name}</td>
+                  <td>{manager.email}</td>
+                  <td>{manager.role.title}</td>
+                  <td>
+                    <Link to={`/managers/${manager.id}`} className='btn btn-info btn-sm me-2'>Edit</Link>
+                    <button className='btn btn-warning btn-sm' onClick={() => handleDelete(manager.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

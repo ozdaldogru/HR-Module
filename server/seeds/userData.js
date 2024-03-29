@@ -1,12 +1,13 @@
 // Import the User model from the specified path
 const { User } = require('../models');
+require('dotenv').config();
 
 // Define an array of user data, each object representing a user with a username, email, and password
 const userData = [
   {
-    username: "admin",
-    email: "admin@gmail.com",
-    password: "password",
+    username: process.env.ADMIN_USERNAME,
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD
   }
 ];
 
